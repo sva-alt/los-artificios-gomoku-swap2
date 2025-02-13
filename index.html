@@ -12,6 +12,7 @@
 	<title>Gomoku</title>
 	<script type='text/javascript' src='https://jgomezpe.github.io/konekti/src/konekti.js'></script>
 	<script type='text/javascript' src='gomoku.js'></script>
+	<script type='text/javascript' src='human.js'></script>
 </head>
 
 <body>
@@ -26,7 +27,7 @@ function KonektiMain(){
 	var client = new Environment()
     client.setPlayers({
         'rand1': new RandomPlayer(),
-        'rand2': new RandomPlayer()
+        'rand2': new Human()
     })
 
 	Konekti.header('title','', 'Gomoku', 3, {'class':'w3-black w3-center'} )
