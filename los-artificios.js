@@ -33,6 +33,7 @@ class LosArtificios extends Agent{
     var open_mult = 1
     var opp_mult 
     var score = 1 
+    var total_score = 0
     var k = 5
     var size = board.length
     for( var i=0; i<size; i++){
@@ -43,61 +44,66 @@ class LosArtificios extends Agent{
           if(j+k<=size && i+k<=size){  //ensure to not go out of bounds
             if (i>0 && j>0 && board[i-1][j-1] != ' ') open_mult = 0.25
             var c = 1
-            for(var h=1;h<k; h++)
+            for(var h=1;h<k; h++){
               if(board[i+h][j+h]==p){ 
               c++
               score *= 1.5 + 50
-              }
-            if(c == k) return 100000000000 
+              } else break;            
+            }
+            if(c == k) return Infinity * opp_mult
             if (j<board.length && j<board.length && board[i][j+c] != ' ') open_mult = 0.25 //is open or not?
-            score *= open_mult * opp_mult
+            total_score += score * open_mult * opp_mult
+            open_mult = 1
           }
           if(j+1>=k && i+k<=size){                        
             if (i>0 && j<board.length && board[i-1][j+1] != ' ') open_mult = 0.25
             var c = 1
-            for(var h=1;h<k; h++)
+            for(var h=1;h<k; h++){
               if(board[i+h][j-h]==p){ 
               c++
               score *= 1.5 + 50
-              }
-            if(c == k) return 100000000000
+              } else break;
+            }
+            if(c == k) return Infinity * opp_mult
             if (i<board.length && j>0 && board[i][j+c] != ' ') open_mult = 0.25 //is open or not?
-            score *= open_mult * opp_mult
+            total_score += score * open_mult * opp_mult
+            open_mult = 1
 
           }
           if(j+k<=size){                        
             if (j>0 && board[i][j-1] != ' ') open_mult = 0.25
             var c = 1
-            for(var h=1;h<k; h++)
+            for(var h=1;h<k; h++){
               if(board[i][j+h]==p){
               c++
               score *= 1.5 + 50
-              }
-            if(c == k) return 100000000000 * opp_mult
-
+              } else break;
+            }
+            if(c == k) return Infinity * opp_mult
             if (j<board.length && board[i][j+c] != ' ') open_mult = 0.25 //is open or not?
-            score *= open_mult * opp_mult
+            total_score += score * open_mult * opp_mult
+            open_mult = 1
 
           }
           if(i+k<=size){
             if (i>0 && board[i-1][j] != ' ') open_mult = 0.25
             var c = 1
-            for(var h=1;h<k; h++)
+            for(var h=1;h<k; h++){
               if(board[i+h][j]==p){
               c++
               score *= 1.5 + 50
               }
               else break;
-            if(c == k) return 100000000000 * opp_mult
-
+            }
+            if(c == k) return Infinity * opp_mult
             if (i<board.length && board[i+c][j] != ' ') open_mult = 0.25 //is open or not?
-            score *= open_mult * opp_mult
-
+            total_score += score * open_mult * opp_mult
+            open_mult = 1
           }
         }
       }
     }      
-    return score
+    return total_score
   }
 
   compute(board, move_state, time){
