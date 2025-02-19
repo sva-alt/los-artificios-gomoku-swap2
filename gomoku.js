@@ -150,8 +150,6 @@ class RandomPlayer extends Agent{
   }
 
   compute(board, move_state, time){
-      for(var i=0; i<200000000; i++){} // Making it very slow to test time restriction
-      for(var i=0; i<200000000; i++){} // Making it very slow to test time restriction
       var moves = this.board.valid_moves(board)
       var index1, index2, index3
       var r

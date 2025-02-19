@@ -2,7 +2,7 @@ class LosArtificios extends Agent {
     constructor() { 
         super();
         this.board = new Board();
-        this.my_color = null; // Inicializar el color del jugador
+        this.my_color // Inicializar el color del jugador
     }
 
     depth_factor(){
@@ -103,14 +103,19 @@ class LosArtificios extends Agent {
         if (depth === 0) {
             return this.value_position(board, this.my_color); // Evaluar la posición en la profundidad máxima
         }
-
+        let min_rang = Math.ceil(board.length * 0.25)
+        let max_rang = Math.floor(board.length * 0.75)
         let moves = this.board.valid_moves(board);
-        moves.sort((a, b) => {
-            let scoreA = this.value_position(this.simulate_move(board, a, this.my_color), this.my_color);
-            let scoreB = this.value_position(this.simulate_move(board, b, this.my_color), this.my_color);
-            return scoreB - scoreA; // Orden descendente
-        });
-
+        let reduced_moves = []
+        if(board.length > 9 ){
+            for (let move of moves) {
+                if(min_rang <= move[0] && max_rang >= move[0] && 
+                    min_rang <= move[1] && max_rang >= move[1]){
+                    reduced_moves.push(move)
+                }            
+            moves = reduced_moves
+            }
+        }
         if (isMaximizingPlayer) {
             let maxEval = -Infinity;
             for (let move of moves) {
@@ -157,13 +162,14 @@ class LosArtificios extends Agent {
                 // Decide si juega con blancas o negras
                 return this.third_move(moves, min_rang, max_rang);
             break;
-            break;
             default:
+                this.my_color = move_state
                 // Cuando el agente tiene que jugar con un color específico
                 let bestScore = -Infinity;
+
                 for (let move of moves) {
                     let newBoard = this.simulate_move(board, move, this.my_color);
-                    let score = this.minimax(newBoard, 3, alpha, beta, false); // Profundidad 3
+                    let score = this.minimax(newBoard, 1, alpha, beta, false); // Profundidad 3
                     if (score > bestScore) {
                         bestScore = score;
                         bestMove = move;
